@@ -1,0 +1,16 @@
+name: closure-patterns
+description: Guides writing and refactoring JavaScript using closure-based design patterns
+
+triggers:
+  - javascript
+  - typescript
+  - refactor
+  - optimize
+  - performance
+  - reliability
+  - bug
+
+steps:
+  - prompts/detect.md
+  - prompts/transform.md
+  - prompts/explain.md
