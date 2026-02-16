@@ -30,6 +30,12 @@ Replace inline or recreated UI callbacks with a stable reference: either a funct
 **Retry/backoff** → **Stateful retry closure**  
 Replace module-level attempt count, delay, or last-attempt time with a factory. The closure holds retry state; the returned async function runs one retry loop (with backoff). Each caller or each call to the factory gets an independent retry flow.
 
+**Lazy init / lazy value** → **Lazy closure**  
+Replace module-level “compute on first access” with a factory. The closure holds the cached value and a “done” flag; the returned function runs the computation on first call and caches, later calls return the cached value. No module-level cache.
+
+**Queued async work** → **Queue-in-closure**  
+Replace module-level “in progress” or queue with a factory. The closure holds the queue and processing state; the returned function enqueues work and processes one item at a time. Serialized execution without global queue state.
+
 **Preserve behavior**  
 Inputs and outputs of the refactored code must match the original. Do not change APIs or semantics unless the user asks. Fix only structure and scope.
 

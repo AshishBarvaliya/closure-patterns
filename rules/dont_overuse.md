@@ -21,4 +21,4 @@ Small helpers, pure functions, or logic with no shared mutable state. Adding fac
 
 ---
 
-If none of the detect patterns apply (no guards, manual caches, outer timers, mutable module state, shared request state, repeated expensive work, missing cleanup/unsubscribe, request context in globals, unstable UI callbacks, retry state at module scope), do not suggest a closure refactor. Do not suggest cleanup closures when the code already unsubscribes correctly. Do not suggest request-scoped factories when context is already passed per request (e.g. via middleware that attaches to `req`).
+If none of the detect patterns apply (no guards, manual caches, outer timers, mutable module state, shared request state, repeated expensive work, lazy init at module scope, queued async at module scope, missing cleanup/unsubscribe, request context in globals, unstable UI callbacks, retry state at module scope), do not suggest a closure refactor. Do not suggest cleanup closures when the code already unsubscribes correctly. Do not suggest request-scoped factories when context is already passed per request (e.g. via middleware that attaches to `req`).

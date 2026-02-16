@@ -4,6 +4,8 @@ Identify code that should be refactored with closure-based patterns. For each ma
 
 **Out of scope — do not cover these.** Adding them makes the skill worse because the agent starts explaining instead of improving code. Do not teach or explain: lexical scope tutorials; closures inside loops (as theory); functional programming theory; currying math examples; interview puzzles; “what is a closure”; partial application libraries. Focus only on detecting bad patterns and refactoring to improve reliability and predictability.
 
+**Production usage set (what to cover).** Execution control: once / guard removal, deduplication, preventing double actions. State encapsulation: factory instead of mutable module state, request-safe logic, isolation of side effects. Performance: memoization, caching expensive work, lazy evaluation. Async stability: debounce, throttle, queued handlers. Concurrency safety: no shared state across requests, no race conditions.
+
 ---
 
 **Boolean execution guards**  
@@ -73,3 +75,17 @@ Risk: Re-subscribes every time; unnecessary re-renders; focus/keyboard bugs when
 Pattern: Attempt count, delay, or “last attempt” time held at top level for async retry loops.  
 Risk: Multiple callers share the same attempt state; one retry overwrites another; can’t run independent retries.  
 → Mark for closure refactor (retry/backoff state inside closure; factory returns a function that does one retry flow).
+
+---
+
+**Lazy init / lazy value at module scope**  
+Pattern: Expensive or side-effectful value computed on first access but stored in a module-level variable (e.g. getter that assigns to `let _x` once).  
+Risk: Init runs at wrong time or multiple times; shared mutable cache; not request-scoped.  
+→ Mark for closure refactor (closure holds value and “done” flag; first access runs computation and caches; later returns cached).
+
+---
+
+**Queued async work (serialized execution)**  
+Pattern: Async work that must run one-at-a-time but “in progress” or queue is at module/outer scope.  
+Risk: Concurrent callers interleave; lost or duplicated work; races.  
+→ Mark for closure refactor (factory holds queue and processing state in closure; returned function enqueues and runs sequentially).
